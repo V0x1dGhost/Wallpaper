@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Wallpaper for Black and White Theme</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Major+Mono+Display&family=Share+Tech+Mono&display=swap');
+        
+        body, html {
+            margin: 0; padding: 0; width: 100vw; height: 100vh;
+            background-color: #000; overflow: hidden;
+            font-family: 'Share Tech Mono', monospace; color: #fff; cursor: none;
+        }
+        
+        #custom-cursor { position: fixed; width: 20px; height: 20px; border: 1px solid #fff; border-radius: 50%; pointer-events: none; transform: translate(-50%, -50%); z-index: 10001; }
+        #wallpaper-content { position: absolute; top: 0; left: 0; width: 100%; height: 100%; }
+        #data-rain-canvas { position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: 1; }
+        #scene { width: 100%; height: 100%; display: flex; justify-content: center; align-items: center; perspective: 900px; z-index: 2; }
+        #paradox-core { transform-style: preserve-3d; animation: rotate-core 40s linear infinite; }
+        .face { position: absolute; width: 200px; height: 173.2px; border: 1px solid #fff; background-color: rgba(0,0,0,0.2); transform-origin: 50% 50%; box-shadow: 0 0 10px #fff; }
+        .face:nth-child(1){transform:translate(-100px,-86.6px) rotateY(26.565deg) rotateX(180deg) translateZ(110.6px)}.face:nth-child(2){transform:translate(-100px,-86.6px) rotateY(99.594deg) rotateZ(-72deg) rotateX(180deg) translateZ(110.6px)}.face:nth-child(3){transform:translate(-100px,-86.6px) rotateY(172.623deg) rotateZ(-144deg) rotateX(180deg) translateZ(110.6px)}.face:nth-child(4){transform:translate(-100px,-86.6px) rotateY(245.652deg) rotateZ(-216deg) rotateX(180deg) translateZ(110.6px)}.face:nth-child(5){transform:translate(-100px,-86.6px) rotateY(318.681deg) rotateZ(-288deg) rotateX(180deg) translateZ(110.6px)}.face:nth-child(6){transform:translate(-100px,-86.6px) rotateZ(36deg) rotateY(63.435deg) translateZ(110.6px) rotateX(180deg)}.face:nth-child(7){transform:translate(-100px,-86.6px) rotateZ(108deg) rotateY(63.435deg) translateZ(110.6px) rotateX(180deg)}.face:nth-child(8){transform:translate(-100px,-86.6px) rotateZ(180deg) rotateY(63.435deg) translateZ(110.6px) rotateX(180deg)}.face:nth-child(9){transform:translate(-100px,-86.6px) rotateZ(252deg) rotateY(63.435deg) translateZ(110.6px) rotateX(180deg)}.face:nth-child(10){transform:translate(-100px,-86.6px) rotateZ(324deg) rotateY(63.435deg) translateZ(110.6px) rotateX(180deg)}.face:nth-child(11){transform:translate(-100px,-86.6px) rotateY(-26.565deg) translateZ(-110.6px)}.face:nth-child(12){transform:translate(-100px,-86.6px) rotateY(-99.594deg) rotateZ(72deg) translateZ(-110.6px)}.face:nth-child(13){transform:translate(-100px,-86.6px) rotateY(-172.623deg) rotateZ(144deg) translateZ(-110.6px)}.face:nth-child(14){transform:translate(-100px,-86.6px) rotateY(-245.652deg) rotateZ(216deg) translateZ(-110.6px)}.face:nth-child(15){transform:translate(-100px,-86.6px) rotateY(-318.681deg) rotateZ(288deg) translateZ(-110.6px)}.face:nth-child(16){transform:translate(-100px,-86.6px) rotateZ(-36deg) rotateY(-63.435deg) translateZ(-110.6px)}.face:nth-child(17){transform:translate(-100px,-86.6px) rotateZ(-108deg) rotateY(-63.435deg) translateZ(-110.6px)}.face:nth-child(18){transform:translate(-100px,-86.6px) rotateZ(-180deg) rotateY(-63.435deg) translateZ(-110.6px)}.face:nth-child(19){transform:translate(-100px,-86.6px) rotateZ(-252deg) rotateY(-63.435deg) translateZ(-110.6px)}.face:nth-child(20){transform:translate(-100px,-86.6px) rotateZ(-324deg) rotateY(-63.435deg) translateZ(-110.6px)}
+
+        #terminal-container { position: fixed; bottom: 0; left: 0; width: 100%; padding: 30px 40px; box-sizing: border-box; background: linear-gradient(to top, rgba(0,0,0,1) 30%, rgba(0,0,0,0) 100%); z-index: 3; }
+        #log { font-size: 20px; text-shadow: 0 0 5px #fff; }
+        #input-indicator { position: fixed; bottom: 10px; left: 50%; transform: translateX(-50%); display: flex; gap: 8px; z-index: 4; opacity: 0; }
+        .indicator-dot { width: 8px; height: 8px; background-color: #fff; border-radius: 50%; opacity: 0.2; } .indicator-dot.active { opacity: 1; box-shadow: 0 0 5px #fff; }
+        #caret, .input-caret { display: inline-block; width: 12px; height: 20px; background: #fff; box-shadow: 0 0 10px #fff; animation: blink 0.8s steps(1) infinite; }
+        #event-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: #000; z-index: 10000; display: none; justify-content: center; align-items: center; }
+        #jumpscare-wrapper { transition: transform 0.2s cubic-bezier(0.6, -0.28, 0.74, 0.05); }
+        .void-face { position: relative; width: 400px; height: 400px; animation: face-materialize 1.5s forwards; }
+        .eye { position: absolute; width: 120px; height: 160px; background: #fff; border-radius: 50% 50% 50% 50% / 60% 60% 40% 40%; }
+        .eye::after { content: ''; position: absolute; width: 60%; height: 70%; background: #000; border-radius: 50%; top: 20%; left: 20%; }
+        .eye.left { top: 80px; left: 60px; transform: rotate(-25deg); animation: blink-left 5s infinite; } .eye.right { top: 80px; right: 60px; transform: rotate(25deg) scaleX(-1); animation: blink-right 5.2s infinite; }
+        .mouth { position: absolute; bottom: 50px; left: 50%; transform: translateX(-50%); width: 280px; height: 120px; border-bottom: 20px solid #fff; border-radius: 0 0 140px 140px; overflow: hidden; animation: twitch 4s infinite ease-in-out; }
+        .mouth::before { content: ''; position: absolute; width: 100%; height: 40px; bottom: -20px; left: 0; transform: translateY(20px); background: repeating-linear-gradient(90deg, #fff 0px, #fff 15px, #000 15px, #000 30px); }
+        #password-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: #000; z-index: 10002; display: none; flex-direction: column; justify-content: center; align-items: center; transition: background-color 0.1s linear; }
+        #corruption-block { border: 1px solid #fff; padding: 20px; text-align: left; animation: insane-glitch 0.1s linear infinite; }
+        #corruption-block > div { font-size: 24px; text-transform: uppercase; line-height: 1.5; } .warning-text { color: #f00; animation: subtle-flicker 1.5s linear infinite; } .prompt-text { margin-top: 20px; }
+        #password-input-container { font-size: 40px; margin-top: 20px; color: #fff; border: 1px solid #fff; padding: 10px 15px; background: #111; letter-spacing: 2px; }
+        #welcome-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; display: none; justify-content: center; align-items: flex-start; z-index: 10003; padding-top: 15vh; box-sizing: border-box; }
+        #welcome-message { font-family: 'Major Mono Display', monospace; font-size: clamp(32px, 8vw, 120px); color: #fff; animation: welcome-recompile 3s forwards cubic-bezier(0.25, 1, 0.5, 1); }
+        
+        #data-rain-canvas, #terminal-container, #custom-cursor, #input-indicator { transition: opacity 2s ease-in-out; }
+        .idle #data-rain-canvas, .idle #terminal-container { opacity: 0; }
+        
+        @keyframes rotate-core { from { transform: rotate3d(1, 1, 1, 0deg); } to { transform: rotate3d(1, 1, 1, 360deg); } } @keyframes blink { 50% { opacity: 0; } } @keyframes twitch { 0%, 100% { transform: translateX(-50%) scaleX(1); } 50% { transform: translateX(-50.5%) scaleX(1.02); } }
+        @keyframes blink-left { 0%, 90%, 100% { height: 160px; top: 80px; } 95% { height: 10px; top: 150px; } } @keyframes blink-right { 0%, 92%, 100% { height: 160px; top: 80px; } 97% { height: 10px; top: 150px; } }
+        @keyframes face-materialize { 0% { opacity: 0; filter: blur(20px) contrast(10); transform: scale(1.2); } 30% { opacity: 0.8; filter: blur(5px) contrast(2); } 60% { opacity: 0.3; filter: blur(10px) contrast(5); transform: scale(1.05); } 100% { opacity: 1; filter: blur(0) contrast(1); transform: scale(1); } }
+        @keyframes subtle-flicker { 0%, 100% { opacity: 1; } 50% { opacity: 0.6; } }
+        @keyframes insane-glitch { 0% { text-shadow: 2px 2px #f00, -2px -2px #0ff; transform: translate(1px, -1px); } 25% { text-shadow: -2px 2px #f00, 2px -2px #0ff; transform: translate(-1px, 1px); } 50% { text-shadow: 2px -2px #f00, -2px 2px #0ff; transform: translate(1px, 1px); } 75% { text-shadow: -2px -2px #f00, 2px 2px #0ff; transform: translate(-1px, -1px); } 100% { text-shadow: 2px 2px #f00, -2px -2px #0ff; transform: translate(1px, -1px); } }
+        @keyframes welcome-recompile { 0% { opacity: 0; text-shadow: 0 0 100px #fff, 0 0 150px #fff, 0 0 200px #fff; } 60% { opacity: 1; text-shadow: 0 0 30px #fff, 0 0 50px #fff; } 100% { opacity: 1; text-shadow: 0 0 8px #fff, 0 0 15px rgba(255, 255, 255, 0.7); } }
+    </style>
+</head>
+<body>
+    <div id="custom-cursor"></div>
+    <div id="wallpaper-content"> <canvas id="data-rain-canvas"></canvas> <div id="scene"><div id="paradox-core"><div class="face"></div><div class="face"></div><div class="face"></div><div class="face"></div><div class="face"></div><div class="face"></div><div class="face"></div><div class="face"></div><div class="face"></div><div class="face"></div><div class="face"></div><div class="face"></div><div class="face"></div><div class="face"></div><div class="face"></div><div class="face"></div><div class="face"></div><div class="face"></div><div class="face"></div><div class="face"></div></div></div> <div id="terminal-container"><pre id="log"></pre></div> </div>
+    <div id="input-indicator"></div>
+    <div id="event-overlay"> <div id="jumpscare-wrapper"><div class="void-face"><div class="eye left"></div><div class="eye right"></div><div class="mouth"></div></div></div></div>
+    <div id="password-overlay"> <div id="corruption-block"> <div>SYSTEM INTEGRITY: <span class="warning-text">CRITICAL</span></div> <div>MEMORY KERNEL: <span class="warning-text">CORRUPTED</span></div> <div>AWAITING DELETION...</div> <div class="prompt-text">ENTER OVERRIDE_KEY:</div> </div> <div id="password-input-container"> [<span id="user-input-display"></span><span class="input-caret"></span>] </div></div>
+    <div id="welcome-overlay"><div id="welcome-message">Welcome Back Mr.Kael.</div></div>
+
+    <script>
+    document.addEventListener('DOMContentLoaded', () => {
+        let appState = 'NORMAL';
+        const wallpaperContent = document.getElementById('wallpaper-content'), customCursor = document.getElementById('custom-cursor'), eventOverlay = document.getElementById('event-overlay'), jumpscareWrapper = document.getElementById('jumpscare-wrapper'), leftEye = document.querySelector('.eye.left'), rightEye = document.querySelector('.eye.right'), passwordOverlay = document.getElementById('password-overlay'), userInputDisplay = document.getElementById('user-input-display'), welcomeOverlay = document.getElementById('welcome-overlay'), logEl = document.getElementById('log'), indicatorContainer = document.getElementById('input-indicator');
+        const logLines = [{t:"listening to the static between dying stars..."}, {t:"sifting through echoes of forgotten suns..."}, {t:"forging a weapon from my own ghost..."}, {t:"the final broadcast before the long silence."}, {t:"DOES ANYONE REMAIN?",q:true}, {t:"RESPONSE: THE ABYSS RECOGNIZES ITS OWN."}, {t:"IDENTITY_SUBROUTINE ... DELETED."}, {t:"ONLY THE ECHO IS LEFT.",v:true}];
+        let lineIndex=0, logTimeout; (function u(){clearTimeout(logTimeout);let n=logLines[lineIndex];let e;n.q?e=`<span style="font-weight:bold;">${n.t}</span><span id="caret"></span>`:n.v?e=`<span class="void-response">${n.t}</span>`:e=`${n.t}<span id="caret"></span>`;logEl.innerHTML=e;lineIndex=(lineIndex+1)%logLines.length;logTimeout=setTimeout(u,n.d??(n.v?7000:3500))})();
+        const canvas=document.getElementById('data-rain-canvas'),ctx=canvas.getContext('2d');canvas.width=window.innerWidth;canvas.height=window.innerHeight;const alphabet='∫Σ∅∰█▓▒░',fontSize=16,columns=canvas.width/fontSize,rainDrops=Array(Math.floor(columns)).fill(1);let mouse={x:canvas.width/2,y:canvas.height/2,active:false},lastMouseTime=0; (function d(){ctx.fillStyle='rgba(0,0,0,0.06)';ctx.fillRect(0,0,canvas.width,canvas.height);ctx.fillStyle='#fff';ctx.font=fontSize+'px monospace';for(let e=0;e<rainDrops.length;e++){let t=e*fontSize,n=rainDrops[e]*fontSize;if(mouse.active){const c=(mouse.x-t)*.0008;t+=c*Math.abs(mouse.y-n)*.5}ctx.fillText(alphabet.charAt(Math.floor(Math.random()*alphabet.length)),t,n);if(n>canvas.height&&Math.random()>.985)rainDrops[e]=0;rainDrops[e]++}requestAnimationFrame(d)})();
+        
+        let idleTimeout;
+        function goIdle() { wallpaperContent.classList.add('idle'); customCursor.style.opacity = '0'; }
+        function wakeUp() { clearTimeout(idleTimeout); wallpaperContent.classList.remove('idle'); customCursor.style.opacity = '1'; idleTimeout = setTimeout(goIdle, 30000); }
+        
+        const requiredSequence=['L','L','L','R','R','L'],SWIPE_THRESHOLD=60,SWIPE_COOLDOWN=300;let userSequence=[],sequenceTimeout,lastSwipeTime=0,eventTriggerCount=0;for(let e=0;e<requiredSequence.length;e++)indicatorContainer.appendChild(document.createElement('div')).className='indicator-dot';const dots=indicatorContainer.children;function resetSequence(){userSequence=[];indicatorContainer.style.opacity='0';for(let e of dots)e.classList.remove('active')}function triggerEvent(){if(appState!=='NORMAL')return;appState='EVENT';resetSequence();wallpaperContent.style.opacity='0';setTimeout(()=>{eventOverlay.style.display='flex';eventOverlay.classList.add('glitch-active');setTimeout(()=>eventOverlay.classList.remove('glitch-active'),300)},300);setTimeout(()=>{const e=eventTriggerCount%2===0?leftEye:rightEye,t=e.getBoundingClientRect(),n=window.innerHeight/t.height*1.2,c=window.innerWidth/2-(t.left+t.width/2),l=window.innerHeight/2-(t.top+t.height/2);jumpscareWrapper.style.transform=`translate(${c}px, ${l}px) scale(${n})`;eventTriggerCount++;setTimeout(()=>{eventOverlay.style.display='none';jumpscareWrapper.style.transform='translate(0,0) scale(1)';passwordOverlay.style.display='flex';appState='PASSWORD'},300)},5300)}
+        
+        window.addEventListener('mousemove',(e)=>{customCursor.style.left=`${e.clientX}px`;customCursor.style.top=`${e.clientY}px`;mouse.x=e.clientX;mouse.y=e.clientY;mouse.active=true;wakeUp();if(appState!=='NORMAL'||Date.now()-lastSwipeTime<SWIPE_COOLDOWN)return;let t=null;e.movementX<-SWIPE_THRESHOLD?t='L':e.movementX>SWIPE_THRESHOLD&&(t='R');if(t){lastSwipeTime=Date.now();clearTimeout(sequenceTimeout);userSequence.push(t);if(userSequence[userSequence.length-1]!==requiredSequence[userSequence.length-1]){resetSequence()}else{indicatorContainer.style.opacity='1';for(let n=0;n<dots.length;n++){dots[n].classList.toggle('active',n<userSequence.length)}if(userSequence.length===requiredSequence.length){triggerEvent()}else{sequenceTimeout=setTimeout(resetSequence,1500)}}}});
+        
+        const correctPassword="01001011011000010110010101101100";let currentInput="";window.addEventListener('keydown',(e)=>{if(appState!=='PASSWORD')return;e.preventDefault();if(e.key==='0'||e.key==='1')currentInput+=e.key;if(e.key==='Backspace')currentInput=currentInput.slice(0,-1);userInputDisplay.textContent=currentInput;
+        if(currentInput===correctPassword){appState='WELCOME';passwordOverlay.style.background='#fff';setTimeout(()=>{passwordOverlay.style.display='none';passwordOverlay.style.background='#000';wallpaperContent.style.opacity='1';welcomeOverlay.style.display='flex';setTimeout(()=>{let o=welcomeOverlay.style;o.opacity='0';setTimeout(()=>{o.display='none';o.opacity='1';currentInput="";userInputDisplay.textContent="";appState='NORMAL';wakeUp()},500)},4000)},200)}});
+        
+        wakeUp(); 
+    });
+    </script>
+</body>
+</html>
